@@ -96,7 +96,7 @@ const colors = [
   "#e57373", // red
   "#64b5f6", // blue
   "#81c784", // green
-  "#fff176", // yellow
+  "#fff176", // yellow (Geheimnis)
   "#ba68c8"  // 💜 purple (goal)
 ];
 
@@ -107,8 +107,10 @@ let tiles = [];
 let timeLeft = TOTAL_TIME;
 let timerInterval;
 let solved = false;
+let lastUniformColor = null; // 🔑 Merkt die letzte Farbe, die alle Felder hatten
 
 function startGame() {
+  lastUniformColor = null; // Reset
   createGrid();
   startTimer();
 }
@@ -127,7 +129,7 @@ function createGrid() {
     tile.dataset.color = startIndex;
     tile.style.backgroundColor = colors[startIndex];
 
-    tile.onclick = () => cycleColor(tile); // 🔑 Nur dieses Feld ändern
+    tile.onclick = () => cycleColor(tile);
 
     tiles.push(tile);
     grid.appendChild(tile);
@@ -137,14 +139,13 @@ function createGrid() {
 function cycleColor(tile) {
   if (solved) return;
 
-  // 🔹 Nur das angeklickte Feld ändern
   let index = Number(tile.dataset.color);
   index = (index + 1) % colors.length;
   tile.dataset.color = index;
   tile.style.backgroundColor = colors[index];
 
   checkWin();
-  // Optional: checkSecret(); // Falls du Gelb-Geheimnis haben willst
+  checkUniformColor();
 }
 
 /* 🧠 WIN CHECK */
@@ -161,6 +162,27 @@ function checkWin() {
     setTimeout(() => {
       alert("🎉 Herzlichen Glückwunsch!\nDu bist ein Denker 🧠");
     }, 200);
+  }
+}
+
+/* ⚠️ Prüfen, ob alle Felder gleiche Farbe haben */
+function checkUniformColor() {
+  const firstColor = colors[Number(tiles[0].dataset.color)];
+  const allSame = tiles.every(
+    t => colors[Number(t.dataset.color)] === firstColor
+  );
+
+  if (allSame) {
+    if (lastUniformColor && firstColor !== lastUniformColor) {
+      // Spieler versucht, andere Farbe auf alle Felder zu machen → kleiner Refresh
+      setTimeout(() => {
+        alert("🔄 Versuch erkannt! Kleiner Refresh...");
+        startGame();
+      }, 200);
+    } else {
+      // erste Uniform-Farbe wird gespeichert
+      lastUniformColor = firstColor;
+    }
   }
 }
 

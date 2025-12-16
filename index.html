@@ -21,7 +21,7 @@ body {
 #gameContainer {
   width: 90%;
   max-width: 700px;
-  min-height: 500px;
+  min-height: 520px;
   padding: 20px;
   background: #000;
   border-radius: 15px;
@@ -34,13 +34,13 @@ body {
 
 h1 {
   font-size: 1.6em;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   color: #4dd0e1;
 }
 
 #timer {
-  margin-bottom: 15px;
-  font-size: 1.1em;
+  font-size: 1.2em;
+  margin-bottom: 20px;
   font-weight: bold;
 }
 
@@ -68,13 +68,6 @@ h1 {
   filter: brightness(1.15);
 }
 
-#message {
-  margin-top: 20px;
-  min-height: 40px;
-  font-size: 1.1em;
-  text-align: center;
-}
-
 @media (max-width: 600px) {
   #grid {
     grid-template-columns: repeat(3, 90px);
@@ -90,94 +83,60 @@ h1 {
 
 <body>
 <div id="gameContainer">
-  <h1>Chromatic Trial</h1>
-  <div id="timer">⏳ Time left: 60</div>
+  <h1></h1>
+  <div id="timer">â³ Time left: 60</div>
   <div id="grid"></div>
-  <div id="message"></div>
 </div>
 
 <script>
-// 🔒 Chromatic Trial – BrainTrials
+// ð§  Chromatic Trial
+// Â© 2025 GÃ«zim Hasani
 
 const colors = [
   "#e57373", // red
   "#64b5f6", // blue
   "#81c784", // green
   "#fff176", // yellow
-  "#ba68c8"  // PURPLE (GOAL)
+  "#ba68c8"  // ð purple (goal)
 ];
 
 const GOAL_COLOR = "#ba68c8";
+const TOTAL_TIME = 60; // â±ï¸ 60 Sekunden (auf 120 Ã¤ndern fÃ¼r 2 Minuten)
 
 let tiles = [];
-let solved = false;
-let timeLeft = 60;
+let timeLeft = TOTAL_TIME;
 let timerInterval;
+let solved = false;
 
-/* ⏳ TIMER */
-function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = 60;
-  updateTimerUI();
-
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerUI();
-
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      endGame("⏰ Time's up!");
-    }
-  }, 1000);
+function startGame() {
+  createGrid();
+  startTimer();
 }
 
-function updateTimerUI() {
-  const timer = document.getElementById("timer");
-  timer.textContent = `⏳ Time left: ${timeLeft}`;
-  timer.className = "";
-
-  if (timeLeft > 30) timer.classList.add("timer-green");
-  else if (timeLeft > 10) timer.classList.add("timer-yellow");
-  else timer.classList.add("timer-red");
-}
-
-/* 🎨 GRID */
 function createGrid() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
   tiles = [];
   solved = false;
-  document.getElementById("message").textContent = "";
 
   for (let i = 0; i < 9; i++) {
-    const div = document.createElement("div");
-    div.className = "tile";
+    const tile = document.createElement("div");
+    tile.className = "tile";
 
-    const index = Math.floor(Math.random() * colors.length);
-    div.dataset.color = index;
-    div.style.backgroundColor = colors[index];
+    // ð WICHTIG: gleiche Startlogik â lÃ¶sbar
+    const startIndex = Math.floor(Math.random() * colors.length);
+    tile.dataset.color = startIndex;
+    tile.style.backgroundColor = colors[startIndex];
 
-    div.onclick = () => cycleColor(div);
+    tile.onclick = () => cycleColor(tile);
 
-    tiles.push(div);
-    grid.appendChild(div);
+    tiles.push(tile);
+    grid.appendChild(tile);
   }
-
-  startTimer();
 }
 
-/* 🔁 COLOR CYCLE (FIXED LOGIC) */
 function cycleColor(tile) {
   if (solved) return;
-
-  const currentColor = colors[Number(tile.dataset.color)];
-
-  // 🛑 If all tiles are same color (but NOT purple), lock the board
-  const allSame = tiles.every(
-    t => colors[Number(t.dataset.color)] === currentColor
-  );
-
-  if (allSame && currentColor !== GOAL_COLOR) return;
 
   let index = Number(tile.dataset.color);
   index = (index + 1) % colors.length;
@@ -187,8 +146,10 @@ function cycleColor(tile) {
   checkWin();
 }
 
-/* 🏆 WIN CHECK */
+/* ð§  WIN CHECK */
 function checkWin() {
+  if (solved) return;
+
   const allPurple = tiles.every(
     t => colors[Number(t.dataset.color)] === GOAL_COLOR
   );
@@ -196,19 +157,46 @@ function checkWin() {
   if (allPurple) {
     solved = true;
     clearInterval(timerInterval);
-    document.getElementById("message").textContent =
-      "🎉 Congratulations!\nYou are a Thinker 🧠💜";
+    setTimeout(() => {
+      alert("ð Herzlichen GlÃ¼ckwunsch!\nDu bist ein Denker ð§ ");
+    }, 200);
   }
 }
 
-/* ❌ END */
-function endGame(text) {
-  solved = true;
-  document.getElementById("message").textContent = text;
+/* â³ TIMER */
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = TOTAL_TIME;
+  updateTimerUI();
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      resetGame();
+    }
+  }, 1000);
 }
 
-/* 🚀 START */
-createGrid();
+function updateTimerUI() {
+  const timerDiv = document.getElementById("timer");
+  timerDiv.textContent = `â³ Time left: ${timeLeft}`;
+  timerDiv.className = "";
+
+  if (timeLeft > 30) timerDiv.classList.add("timer-green");
+  else if (timeLeft > 10) timerDiv.classList.add("timer-yellow");
+  else timerDiv.classList.add("timer-red");
+}
+
+/* ð RESET */
+function resetGame() {
+  alert("â±ï¸ Time over!\nTry again.");
+  startGame();
+}
+
+startGame();
 </script>
 </body>
 </html>

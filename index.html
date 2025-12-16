@@ -117,10 +117,8 @@ let tiles = [];
 let timeLeft = TOTAL_TIME;
 let timerInterval;
 let solved = false;
-let lastUniformColor = null; // Letzte Farbe, die alle Felder hatten
 
 function startGame() {
-  lastUniformColor = null; // Reset
   createGrid();
   startTimer();
 }
@@ -155,7 +153,7 @@ function cycleColor(tile) {
   tile.style.backgroundColor = colors[index];
 
   checkWin();
-  checkUniformColor();
+  checkUniformRefresh();
 }
 
 function checkWin() {
@@ -174,28 +172,19 @@ function checkWin() {
   }
 }
 
-// 🔹 Blink-Effekt, wenn alle Felder die gleiche Farbe haben
-function checkUniformColor() {
+// 🔹 Blink + Refresh nach jeder Uniform-Farbe
+function checkUniformRefresh() {
   const firstColor = colors[Number(tiles[0].dataset.color)];
   const allSame = tiles.every(
     t => colors[Number(t.dataset.color)] === firstColor
   );
 
   if (allSame) {
-    // Immer blinken, egal ob erste oder nächste Uniform-Farbe
     tiles.forEach(tile => tile.classList.add("blink"));
     setTimeout(() => {
       tiles.forEach(tile => tile.classList.remove("blink"));
+      startGame(); // kleiner Refresh nach jeder Uniform-Farbe
     }, 200);
-
-    // Refresh nur, wenn andere Uniform-Farbe versucht wird
-    if (lastUniformColor && firstColor !== lastUniformColor) {
-      setTimeout(() => {
-        startGame();
-      }, 250);
-    } else {
-      lastUniformColor = firstColor; // erste Uniform-Farbe merken
-    }
   }
 }
 

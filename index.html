@@ -373,68 +373,62 @@ function checkAnswer(){
 ========================== */
 
 const colorsCT = [
-  "#e57373","#f06292","#ba68c8",
-  "#9575cd","#7986cb","#64b5f6",
-  "#4dd0e1","#4db6ac","#81c784"
+  "#e57373","#64b5f6","#81c784",
+  "#fff176","#ba68c8"
 ];
 
 let chromaticTime = 60;
 let chromaticTimerInterval;
-let correctClicks = 0;
-let correctIndex = 0;
+let tilesCT = [];
 
 function startChromaticTrial(){
-  stage = 'chromatic';
-  const container = document.getElementById('gameContainer');
-  container.innerHTML = `
+  stage='chromatic';
+  const container=document.getElementById('gameContainer');
+  container.innerHTML=`
     <h1>🌈 Chromatic Trial</h1>
     <div id="grid"></div>
     <div id="timer">⏳ Time left: 60</div>
-    <div id="message"></div>
   `;
-  chromaticTime = 60;
-  correctClicks = 0;
-  generateChromaticGrid();
+  createChromaticGrid();
   startChromaticTimer();
 }
 
-function generateChromaticGrid(){
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  const mainColor = randomColor();
-  let diffColor = randomColor();
-  while(diffColor === mainColor) diffColor = randomColor();
-
-  correctIndex = Math.floor(Math.random() * 9);
+function createChromaticGrid(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  tilesCT=[];
 
   for(let i=0;i<9;i++){
-    const tile = document.createElement('div');
-    tile.className = 'tile';
-    tile.style.backgroundColor = i===correctIndex ? diffColor : mainColor;
-    tile.onclick = ()=>handleChromaticClick(i);
+    const tile=document.createElement('div');
+    tile.className='tile';
+    const idx=Math.floor(Math.random()*colorsCT.length);
+    tile.dataset.color=idx;
+    tile.style.backgroundColor=colorsCT[idx];
+    tile.onclick=()=>cycleColor(tile);
+    tilesCT.push(tile);
     grid.appendChild(tile);
   }
 }
 
-function handleChromaticClick(index){
-  if(index === correctIndex){
-    correctClicks++;
-    generateChromaticGrid();
-  } else {
-    document.getElementById('message').textContent = '❌ Wrong! Restarting...';
-    setTimeout(restartGame, 1000);
-  }
+function cycleColor(tile){
+  let idx=Number(tile.dataset.color);
+  idx=(idx+1)%colorsCT.length;
+  tile.dataset.color=idx;
+  tile.style.backgroundColor=colorsCT[idx];
 }
 
 function startChromaticTimer(){
   clearInterval(chromaticTimerInterval);
-  chromaticTimerInterval = setInterval(()=>{
+  chromaticTime=60;
+
+  chromaticTimerInterval=setInterval(()=>{
     chromaticTime--;
-    document.getElementById('timer').textContent =
+    document.getElementById('timer').textContent=
       `⏳ Time left: ${chromaticTime}`;
+
     if(chromaticTime<=0){
       clearInterval(chromaticTimerInterval);
-      restartGame();
+      restartGame(); // zurück zu START
     }
   },1000);
 }

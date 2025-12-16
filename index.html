@@ -174,6 +174,7 @@ function checkWin() {
   }
 }
 
+// 🔹 Blink-Effekt, wenn alle Felder die gleiche Farbe haben
 function checkUniformColor() {
   const firstColor = colors[Number(tiles[0].dataset.color)];
   const allSame = tiles.every(
@@ -181,16 +182,19 @@ function checkUniformColor() {
   );
 
   if (allSame) {
+    // Immer blinken, egal ob erste oder nächste Uniform-Farbe
+    tiles.forEach(tile => tile.classList.add("blink"));
+    setTimeout(() => {
+      tiles.forEach(tile => tile.classList.remove("blink"));
+    }, 200);
+
+    // Refresh nur, wenn andere Uniform-Farbe versucht wird
     if (lastUniformColor && firstColor !== lastUniformColor) {
-      // Spieler versucht andere Farbe → kleiner blink+refresh
-      tiles.forEach(tile => tile.classList.add("blink"));
       setTimeout(() => {
-        tiles.forEach(tile => tile.classList.remove("blink"));
         startGame();
-      }, 200);
+      }, 250);
     } else {
-      // erste Uniform-Farbe merken
-      lastUniformColor = firstColor;
+      lastUniformColor = firstColor; // erste Uniform-Farbe merken
     }
   }
 }

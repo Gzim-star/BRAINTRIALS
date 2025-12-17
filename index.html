@@ -48,7 +48,7 @@ button:hover { background: #4caf50; }
 </head>
 <body>
 <div id="gameContainer">
-  <h1>🧠 BrainTrials</h1>
+  <h1>🧠</h1>
   <button onclick="startWordChain()">START</button>
 </div>
 <script>
@@ -70,7 +70,7 @@ function startWordChain(){
   const container=document.getElementById('gameContainer');
   container.innerHTML=`
     <h1></h1>
-    <div id="wordDisplay">Start word: Apple</div>
+    <div id="wordDisplay">Apple</div>
     <div id="inputContainer">
       <input type="text" id="playerWord" placeholder="Type your word here" autocomplete="off" autocapitalize="none">
       <button onclick="playWord()">OK</button>
@@ -78,7 +78,7 @@ function startWordChain(){
     <div id="message"></div>
   `;
   currentWord='Apple'; usedWords=[currentWord];
-  wordList=["Apple","Elephant","Tiger","Rabbit","Tree","Eagle","Egg","Giraffe","Fish","Horse","Orange","Grapes","Snake","Emu","Umbrella","Lion","Nut","Tapir","Rat","Tomato","Owl","Lemon","Night","Hat","Turtle","Eel","Lamb","Bread","Dog","Goat","Ant","Seal","Lily","Yak","Kangaroo"];
+  wordList=["Apple","Samsung","Elephant","Tiger","Rabbit","Tree","Eagle","Egg","Giraffe","Fish","Horse","Orange","Grapes","Snake","Emu","Umbrella","Lion","Nut","Tapir","Rat","Tomato","Owl","Lemon","Night","Hat","Turtle","Eel","Lamb","Bread","Dog","Goat","Ant","Seal","Lily","Yak","Kangaroo"];
 }
 
 function playWord(){
@@ -116,6 +116,8 @@ function startTicTacToe(){
   const container=document.getElementById('gameContainer');
   container.innerHTML=`
     <h1></h1>
+    
+    
     <div id="boardWrapper"><div id="board"></div></div>
     <div id="timer">⏳ Time left: 6</div>
     <div id="message"></div>
@@ -181,7 +183,7 @@ function startChromaticTrial(){
   stage='chromatic';
   const container=document.getElementById('gameContainer');
   container.innerHTML=`
-    <h1>🌈 Chromatic Trial</h1>
+    <h1></h1>
     <div id="grid"></div>
     <div id="timer">⏳ Time left: 60</div>
   `;

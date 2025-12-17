@@ -129,6 +129,7 @@ function startTicTacToe(){
       </select>
     </div>
     `;
+  
     #board {
   display: grid;
   grid-template-columns: repeat(3, 150px);
@@ -155,7 +156,7 @@ function startTicTacToe(){
     font-size: 48px;
   }
 }
-  `;
+
   board=['','','','','','','','','']; ticScore={player:0,ai:0,draw:0}; gameOver=false; renderBoard(); startTimer();
 }
 

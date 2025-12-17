@@ -261,10 +261,12 @@ function startChromaticTimer(){
     if(chromaticTime>30) timerDiv.classList.add('timer-green');
     else if(chromaticTime>10) timerDiv.classList.add('timer-yellow');
     else timerDiv.classList.add('timer-red');
-    if(chromaticTime<=0){
-      clearInterval(chromaticTimerInterval);
-      alert("⏳ Zeit vorbei! Versuch es erneut.");
-      restartGame();
+    if(chromaticTime <= 0){
+  clearInterval(chromaticTimerInterval);
+  clearTimeout(uniformTimeout); // <-- hinzufügen
+  alert("⏳ Zeit vorbei! Versuch es erneut.");
+  restartGame(); // sofort Start-Button zeigen
+
     }
   },1000);
 }

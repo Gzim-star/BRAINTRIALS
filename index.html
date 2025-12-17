@@ -161,7 +161,7 @@ function startMathChallenge(){
       <input id="answer" type="number" placeholder="Your answer" autofocus>
       <button onclick="checkMathAnswer()">OK</button>
     </div>
-    <div id="timer">⏳ Time left:01:20</div>
+    <div id="timer">⏳ Time left: 01:20</div>
     <div id="message"></div>
   `;
   mathTimer=30; generateMathTask(); startMathTimer();
@@ -196,7 +196,7 @@ const colorsCT=[
   "#607d8b","#78909c"
 ];
 const CHROMATIC_GOAL="#ba68c8"; 
-let tilesCT=[], chromaticTime=15:00, chromaticTimerInterval, uniformTimeout=null, solved=false;
+let tilesCT=[], chromaticTime=900, chromaticTimerInterval, uniformTimeout=null, solved=false;
 
 function startChromaticTrial(){
   stage='chromatic';
@@ -272,7 +272,7 @@ function checkUniformReset(){
 // Timer starten
 function startChromaticTimer(){
   clearInterval(chromaticTimerInterval);
-  chromaticTime = 60;
+  chromaticTime = 15:00;
   const timerDiv = document.getElementById('timer');
   timerDiv.textContent = `⏳ Time left: ${chromaticTime}`;
   chromaticTimerInterval = setInterval(()=>{

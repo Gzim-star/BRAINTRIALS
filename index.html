@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>🧠</title>
@@ -30,18 +28,20 @@ button:hover { background: #4caf50; }
 .timer-yellow { color: #ffc107; }
 .timer-red { color: #f44336; }
 
+/* ===================== Tic-Tac-Toe & Chromatic Styles ===================== */
 #boardWrapper { display: flex; align-items: center; justify-content: center; width: 100%; }
-#board { display: grid; grid-template-columns: repeat(3, 150px); grid-template-rows: repeat(3, 150px); gap: 10px; }
-.cell { width:150px; height:150px; display:flex; align-items:center; justify-content:center; font-size:72px; cursor:pointer; transition:all 0.3s; color:white; font-weight:bold; border-radius:12px; }
-.cell:hover { transform:scale(1.05); filter: brightness(1.2); }
+#board { display: grid; grid-template-columns: repeat(3, 120px); grid-template-rows: repeat(3, 120px); gap: 12px; margin-top:20px; }
+.cell { width:120px; height:120px; display:flex; align-items:center; justify-content:center; font-size:48px; cursor:pointer; transition: transform 0.15s, filter 0.15s; color:white; font-weight:bold; border-radius:15px; }
+.cell:hover { transform: scale(1.05); filter: brightness(1.15); }
 #scoreboard, #level { margin-top:10px; color:white; }
+
 #grid { display: grid; grid-template-columns: repeat(3, 120px); grid-template-rows: repeat(3, 120px); gap: 12px; margin-top:20px; }
 .tile { width: 120px; height: 120px; border-radius: 15px; cursor: pointer; transition: transform 0.15s, filter 0.15s; }
 .tile:hover { transform: scale(1.05); filter: brightness(1.15); }
 
 @media (max-width:768px){
   h1{font-size:1.4em;} #task, #wordDisplay{font-size:1.2em;} #playerWord, #answer{font-size:0.9em;}
-  button{font-size:0.9em; padding:10px 20px;} #board{grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);} .cell{width:100px;height:100px;font-size:48px;}
+  button{font-size:0.9em; padding:10px 20px;} #board{grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);} .cell{width:100px;height:100px;font-size:40px;}
 }
 @media (max-width:600px){#grid{grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px);} .tile{width: 90px; height: 90px;}}
 </style>
@@ -52,25 +52,21 @@ button:hover { background: #4caf50; }
   <button onclick="startWordChain()">START</button>
 </div>
 <script>
-// ==========================
-// VARIABLES
-// ==========================
+// ========================== VARIABLES ==========================
 let stage='start', wordScore=0, ticScore={player:0,ai:0,draw:0};
 let currentWord='', usedWords=[], wordList=[];
 let board=[], gameOver=false;
 let correctAnswer=0, correctMathCount=0;
-let timer=9, timerInterval;
-let mathTimer=01:20, mathTimerInterval;
+let timer=6, timerInterval;
+let mathTimer=30, mathTimerInterval;
 
-// ==========================
-// WORD CHAIN
-// ==========================
+// ========================== WORD CHAIN ==========================
 function startWordChain(){
   stage='word';
   const container=document.getElementById('gameContainer');
   container.innerHTML=`
     <h1></h1>
-    <div id="wordDisplay">Apple</div>
+    <div id="wordDisplay">Start word: Apple</div>
     <div id="inputContainer">
       <input type="text" id="playerWord" placeholder="Type your word here" autocomplete="off" autocapitalize="none">
       <button onclick="playWord()">OK</button>
@@ -78,7 +74,7 @@ function startWordChain(){
     <div id="message"></div>
   `;
   currentWord='Apple'; usedWords=[currentWord];
-  wordList=["Apple","Samsung","Elephant","Tiger","Rabbit","Tree","Eagle","Egg","Giraffe","Fish","Horse","Orange","Grapes","Snake","Emu","Umbrella","Lion","Tapir","Rat","Tomato","Owl","Lemon","Night","Hat","Turtle","Eel","Lamb","Bread","Dog","Goat","Ant","Seal","Lily","Yak","Kangaroo"];
+  wordList=["Apple","Elephant","Tiger","Rabbit","Tree","Eagle","Egg","Giraffe","Fish","Horse","Orange","Grapes","Snake","Emu","Umbrella","Lion","Nut","Tapir","Rat","Tomato","Owl","Lemon","Night","Hat","Turtle","Eel","Lamb","Bread","Dog","Goat","Ant","Seal","Lily","Yak","Kangaroo"];
 }
 
 function playWord(){
@@ -108,18 +104,14 @@ function aiTurn(){
   wordScore++; if(wordScore>=6){ setTimeout(startTicTacToe,800);}
 }
 
-// ==========================
-// TIC TAC TOE
-// ==========================
+// ========================== TIC TAC TOE ==========================
 function startTicTacToe(){
   stage='tic';
   const container=document.getElementById('gameContainer');
   container.innerHTML=`
     <h1></h1>
-    
-    
     <div id="boardWrapper"><div id="board"></div></div>
-    <div id="timer">⏳ Time left: 9</div>
+    <div id="timer">⏳ Time left: 6</div>
     <div id="message"></div>
     <div id="scoreboard">Player: 0 | AI: 0 | Draws: 0</div>
     <div id="level">
@@ -134,9 +126,20 @@ function startTicTacToe(){
   board=['','','','','','','','','']; ticScore={player:0,ai:0,draw:0}; gameOver=false; renderBoard(); startTimer();
 }
 
-function renderBoard(){const b=document.getElementById('board'); b.innerHTML=''; board.forEach((c,i)=>{const d=document.createElement('div'); d.className='cell'; d.textContent=c; if(c==='')d.style.backgroundColor=randomColor(); d.onclick=()=>playerMove(i); b.appendChild(d);});}
+function renderBoard(){
+  const b=document.getElementById('board');
+  b.innerHTML='';
+  board.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='cell';
+    d.textContent=c;
+    if(c==='') d.style.backgroundColor=randomColor();
+    d.onclick=()=>playerMove(i);
+    b.appendChild(d);
+  });
+}
 function randomColor(){const c=["#e57373","#f06292","#ba68c8","#9575cd","#7986cb","#64b5f6","#4dd0e1","#4db6ac","#81c784","#aed581","#fff176","#ffd54f","#ffb74d","#ff8a65"]; return c[Math.floor(Math.random()*c.length)];}
-function startTimer(){clearInterval(timerInterval); timer=9; updateTimerUI(); timerInterval=setInterval(()=>{timer--; updateTimerUI(); if(timer===0){clearInterval(timerInterval); aiMove();}},1000);}
+function startTimer(){clearInterval(timerInterval); timer=6; updateTimerUI(); timerInterval=setInterval(()=>{timer--; updateTimerUI(); if(timer===0){clearInterval(timerInterval); aiMove();}},1000);}
 function updateTimerUI(){const d=document.getElementById('timer'); d.textContent=`⏳ Time left: ${timer}`; d.className=''; if(timer>=4)d.classList.add('timer-green'); else if(timer>=2)d.classList.add('timer-yellow'); else d.classList.add('timer-red');}
 function playerMove(i){if(board[i]!=='') return; board[i]='X'; clearInterval(timerInterval); renderBoard(); if(checkWinner('X')){ gameOver=true; ticScore.player++; document.getElementById('message').textContent="You win! 🎉"; updateScore(); if(ticScore.player>=3){ setTimeout(startMathChallenge,800);} else { setTimeout(resetBoard,800);} return;} if(board.every(c=>c!=='')){ gameOver=true; ticScore.draw++; updateScore(); setTimeout(resetBoard,800); return;} setTimeout(aiMove,400);}
 function aiMove(){if(gameOver)return; const lvl=document.getElementById('levelSelect').value; let move;if(lvl==='easy')move=randomMove(); else if(lvl==='medium')move=mediumMove(); else move=hardMove(); board[move]='O'; renderBoard(); if(checkWinner('O')){gameOver=true; ticScore.ai++; document.getElementById('message').textContent="AI wins! 🤖"; updateScore(); if(ticScore.ai>=3){ setTimeout(startMathChallenge,800);} else { setTimeout(resetBoard,800);} return;} if(board.every(c=>c!=='')){gameOver=true; ticScore.draw++; updateScore(); setTimeout(resetBoard,800); return;} startTimer();}
@@ -148,9 +151,7 @@ function minimax(b,d,max){if(checkWinner('O')) return 10-d; if(checkWinner('X'))
 function checkWinner(p){const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; return w.some(x=>x.every(i=>board[i]===p));}
 function updateScore(){document.getElementById('scoreboard').textContent=`Player: ${ticScore.player} | AI: ${ticScore.ai} | Draws: ${ticScore.draw}`;}
 
-// ==========================
-// MATH CHALLENGE
-// ==========================
+// ========================== MATH CHALLENGE ==========================
 function startMathChallenge(){
   stage='math';
   const container=document.getElementById('gameContainer');
@@ -161,7 +162,7 @@ function startMathChallenge(){
       <input id="answer" type="number" placeholder="Your answer" autofocus>
       <button onclick="checkMathAnswer()">OK</button>
     </div>
-    <div id="timer">⏳ Time left: 01:20</div>
+    <div id="timer">⏳ Time left: 30</div>
     <div id="message"></div>
   `;
   mathTimer=30; generateMathTask(); startMathTimer();
@@ -172,31 +173,10 @@ function generateMathTask(){const p=randomInt(1,3); let a,b,c,text; if(p===1){a=
 function startMathTimer(){clearInterval(mathTimerInterval); mathTimerInterval=setInterval(()=>{mathTimer--; const d=document.getElementById('timer'); d.textContent=`⏳ Time left: ${mathTimer}`; d.className=''; if(mathTimer>=20)d.classList.add('timer-green'); else if(mathTimer>=10)d.classList.add('timer-yellow'); else d.classList.add('timer-red'); if(mathTimer<=0){clearInterval(mathTimerInterval); correctMathCount=0; restartGame();}},1000);}
 function checkMathAnswer(){const input=document.getElementById('answer'); if(input.value==='')return; clearInterval(mathTimerInterval); if(Number(input.value)===correctAnswer){correctMathCount++; document.getElementById('message').textContent='✅ Correct!'; if(correctMathCount>=9){ setTimeout(startChromaticTrial,700); return;} setTimeout(()=>{mathTimer=30; generateMathTask(); startMathTimer();},700);} else{document.getElementById('message').textContent='❌ Wrong!'; correctMathCount=0; setTimeout(restartGame,1000);}}
 
-// ==========================
-// CHROMATIC TRIAL
-// ==========================
-const colorsCT=[
-  "#e57373","#64b5f6","#81c784","#fff176","#ba68c8",
-
-  "#f44336","#e53935","#d32f2f","#c62828",
-  "#ff5722","#ff7043","#ff8a65",
-  "#ff9800","#ffb74d","#ffcc80",
-  "#ffc107","#ffeb3b",
-  "#cddc39","#aed581",
-  "#8bc34a","#66bb6a",
-  "#4caf50","#43a047",
-  "#009688","#26a69a",
-  "#00bcd4","#4dd0e1",
-  "#03a9f4","#2196f3","#1e88e5",
-  "#3f51b5","#5c6bc0",
-  "#673ab7","#7e57c2",
-  "#9c27b0","#ab47bc",
-  "#e91e63","#f06292",
-  "#795548","#8d6e63",
-  "#607d8b","#78909c"
-];
+// ========================== CHROMATIC TRIAL ==========================
+const colorsCT=["#e57373","#64b5f6","#81c784","#fff176","#f44336","#ba68c8"];
 const CHROMATIC_GOAL="#ba68c8"; 
-let tilesCT=[], chromaticTime=900, chromaticTimerInterval, uniformTimeout=null, solved=false;
+let tilesCT=[], chromaticTime=60, chromaticTimerInterval, uniformTimeout=null, solved=false;
 
 function startChromaticTrial(){
   stage='chromatic';
@@ -204,7 +184,7 @@ function startChromaticTrial(){
   container.innerHTML=`
     <h1></h1>
     <div id="grid"></div>
-    <div id="timer">⏳ Time left: 15:00</div>
+    <div id="timer">⏳ Time left: 60</div>
   `;
   createChromaticGrid();
   startChromaticTimer();
@@ -224,7 +204,7 @@ function createChromaticGrid(){
     tile.dataset.color = idx;
     tile.style.backgroundColor = colorsCT[idx];
 
-    tile.onclick = () => {
+       tile.onclick = () => {
       cycleColor(tile);
       checkWin();
       checkUniformReset();
@@ -272,7 +252,7 @@ function checkUniformReset(){
 // Timer starten
 function startChromaticTimer(){
   clearInterval(chromaticTimerInterval);
-  chromaticTime = 15:00;
+  chromaticTime = 60;
   const timerDiv = document.getElementById('timer');
   timerDiv.textContent = `⏳ Time left: ${chromaticTime}`;
   chromaticTimerInterval = setInterval(()=>{

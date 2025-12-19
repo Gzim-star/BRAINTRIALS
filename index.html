@@ -255,7 +255,13 @@ function startMathTimer(){clearInterval(mathTimerInterval); mathTimerInterval=se
 function checkMathAnswer(){const input=document.getElementById('answer'); if(input.value==='')return; clearInterval(mathTimerInterval); if(Number(input.value)===correctAnswer){correctMathCount++; document.getElementById('message').textContent='✅ Correct!'; if(correctMathCount>=9){ setTimeout(startChromaticTrial,700); return;} setTimeout(()=>{mathTimer=30; generateMathTask(); startMathTimer();},700);} else{document.getElementById('message').textContent='❌ Wrong!'; correctMathCount=0; setTimeout(restartGame,1000);}}
 
 // ========================== CHROMATIC TRIAL ==========================
-const colorsCT=["#e57373","#64b5f6","#81c784","#fff176","#f44336","#ba68c8"];
+const colorsCT=["#ba68c8",
+"#64b5f6",
+"#81c784",
+"#ffb74d",
+"#e57373",
+"#ffffff",
+"#4dd0e1"];
 const CHROMATIC_GOAL="#ba68c8"; 
 let tilesCT=[], chromaticTime=60, chromaticTimerInterval, uniformTimeout=null, solved=false;
 

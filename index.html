@@ -196,7 +196,7 @@ function startWordChain(){
     font-family:'Press Start 2P', cursive;
     font-size:0.7em;
     color:#ffc107;
-    min-height:20px;
+    min-height:18px;
     opacity:0;
     transition: opacity 0.5s;
   "></div>
@@ -215,7 +215,7 @@ function playWord(){
   if(!word) return;
   // Mindestlänge
 if(word.length < 6){
-  message.textContent = "❌ Wrong?";
+  message.textContent = "❌ Wrong";
   return;
 }
 
